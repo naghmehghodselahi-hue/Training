@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Learning Format Decision Tool</title>
+  <style>
+    :root {
+      --green: #2e7d32;
+      --light-green: #e8f5e9;
+      --orange: #f57c00;
+      --light-orange: #fff3e0;
+      --amber: #ffb300;
+      --grey: #555;
+      --bg: #fafafa;
+      --card-radius: 10px;
+      --shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--grey);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 900px;
+      width: 100%;
+      padding: 24px;
+    }
+
+    h1 {
+      color: var(--green);
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #777;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .question {
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .helper {
+      font-size: 0.85rem;
+      color: #777;
+      margin-bottom: 16px;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .btn {
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s ease-out;
+    }
+
+    .btn:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+    }
+
+    .btn-primary {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      padding-left: 0;
+    }
+
+    .path {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+
+    .pill-step {
+      background: var(--light-green);
+      color: var(--green);
+    }
+
+    .outcome {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .outcome-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .badge-face {
+      background: var(--orange);
+    }
+
+    .badge-blended {
+      background: var(--amber);
+    }
+
+    .badge-virtual {
+      background: #0288d1;
+    }
+
+    .badge-online {
+      background: #7b1fa2;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      background: var(--light-green);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border-left: 3px solid var(--green);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.8fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 720px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .small-label {
+      font-size: 0.78rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    /* PROMINENT NEXT STEP BOX */
+    .next-step-box {
+      background: linear-gradient(135deg, var(--orange) 0%, #e67e00 100%);
+      border: 3px solid #d47000;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 24px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(245, 124, 0, 0.3);
+      animation: pulse-highlight 2s ease-in-out infinite;
+    }
+
+    .next-step-box b {
+      color: #fff;
+    }
+
+    .next-step-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .next-step-text b {
+      font-size: 1.3rem;
+      display: block;
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 12px;
+      border-radius: 8px;
+      margin-left: -12px;
+      margin-right: -12px;
+      margin-bottom: -12px;
+      margin-top: 12px;
+    }
+
+    @keyframes pulse-highlight {
+      0%, 100% {
+        box-shadow: 0 8px 16px rgba(245, 124, 0, 0.3);
+      }
+      50% {
+        box-shadow: 0 8px 24px rgba(245, 124, 0, 0.6);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <h1>Learning Format Decision Tool</h1>
+  <p class="subtitle">
+    Answer a few questions to identify the most suitable training delivery format for your needs.
+  </p>
+
+  <div class="layout">
+    <div>
+      <div class="card" id="question-card">
+        <div id="question-container"></div>
+      </div>
+
+      <button class="btn btn-ghost" id="restart-btn" style="display:none;">
+        ← Start over
+      </button>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="small-label">Your path</div>
+        <div id="path-container" class="path">
+          No answers yet. Start by choosing an option.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="small-label">Recommended format</div>
+        <div id="outcome-container">
+          You will see a recommendation here once you answer the questions.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tree = {
+    id: "q1",
+    text: "Does the training require fully face-to-face interaction, collaboration, or guidance from an instructor?",
+    helper: "For example: complex group activities, role plays, or sensitive discussions that work best in-person.",
+    options: {
+      Yes: {
+        type: "outcome",
+        key: "face_to_face"
+      },
+      No: {
+        id: "q2",
+        text: "Does the training require hands-on practice or real-world application of skills?",
+        helper: "Think of activities where learners must physically use tools, equipment, or work directly in the real environment.",
+        options: {
+          Yes: {
+            type: "outcome",
+            key: "blended"
+          },
+          No: {
+            id: "q3",
+            text: "Do learners need flexible access to training content that can be completed remotely?",
+            helper: "For example: geographically dispersed learners, shift workers, or people who need to study at varying times.",
+            options: {
+              Yes: {
+                id: "q4",
+                text: "Do learners need live interaction with the instructor and peers?",
+                helper: "Consider whether real-time discussions, Q&A, or group collaboration are critical to outcomes.",
+                options: {
+                  Yes: {
+                    type: "outcome",
+                    key: "virtual"
+                  },
+                  No: {
+                    id: "q5",
+                    text: "Can the content be effectively delivered in a 6‑minute video?",
+                    helper: "Short, focused topics such as a single concept, quick update, or micro‑skill usually fit this format.",
+                    options: {
+                      Yes: {
+                        type: "outcome",
+                        key: "learning_bite"
+                      },
+                      No: {
+                        type: "outcome",
+                        key: "online"
+                      }
+                    }
+                  }
+                }
+              },
+              No: {
+                type: "outcome",
+                key: "face_to_face"
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const outcomes = {
+    face_to_face: {
+      label: "Face to face",
+      badgeClass: "badge-face",
+      summary: "100% in‑person sessions with learners and instructors together in the same physical space.",
+      detail: "Best suited for highly interactive experiences, complex collaboration, or when in‑room practice and immediate feedback are essential."
+    },
+    blended: {
+      label: "Blended learning",
+      badgeClass: "badge-blended",
+      summary: "Mix of face‑to‑face and online components, combining synchronous sessions with self‑paced activities.",
+      detail: "Useful when you need some hands‑on or in‑person practice but also want the flexibility and scalability of online modules."
+    },
+    virtual: {
+      label: "Virtual learning",
+      badgeClass: "badge-virtual",
+      summary: "100% online live sessions that simulate a classroom through video conferencing and real‑time interaction.",
+      detail: "Ideal when learners are remote but still need live discussions, breakout activities, and direct contact with instructors and peers."
+    },
+    online: {
+      label: "Online learning",
+      badgeClass: "badge-online",
+      summary: "Self‑paced modules, readings, and resources that learners can access anytime, anywhere.",
+      detail: "Well suited to content that does not require live interaction and can be learned through structured digital materials."
+    },
+    learning_bite: {
+      label: "Learning bite",
+      badgeClass: "badge-online",
+      summary: "Short, focused online resources such as micro‑videos or quick modules (around 6 minutes).",
+      detail: "Effective for simple topics, refreshers, or large audiences who need concise, just‑in‑time information."
+    }
+  };
+
+  let currentNode = tree;
+  let path = [];
+
+  const questionContainer = document.getElementById("question-container");
+  const pathContainer = document.getElementById("path-container");
+  const outcomeContainer = document.getElementById("outcome-container");
+  const restartBtn = document.getElementById("restart-btn");
+
+  function renderQuestion(node) {
+    questionContainer.innerHTML = "";
+
+    const qEl = document.createElement("div");
+    qEl.className = "question";
+    qEl.textContent = node.text;
+    questionContainer.appendChild(qEl);
+
+    if (node.helper) {
+      const helper = document.createElement("div");
+      helper.className = "helper";
+      helper.textContent = node.helper;
+      questionContainer.appendChild(helper);
+    }
+
+    const optionsEl = document.createElement("div");
+    optionsEl.className = "options";
+
+    Object.keys(node.options).forEach((label) => {
+      const btn = document.createElement("button");
+      btn.className = "btn btn-primary";
+      btn.textContent = label;
+      btn.onclick = () => handleAnswer(node, label);
+      optionsEl.appendChild(btn);
+    });
+
+    questionContainer.appendChild(optionsEl);
+  }
+
+  function handleAnswer(node, answerLabel) {
+    const next = node.options[answerLabel];
+
+    path.push({
+      question: node.text,
+      answer: answerLabel
+    });
+    updatePathDisplay();
+
+    if (next.type === "outcome") {
+      currentNode = null;
+      renderOutcome(next.key);
+      questionContainer.innerHTML = "<div class='question'>You've reached a recommendation.</div>";
+      restartBtn.style.display = "inline-block";
+    } else {
+      currentNode = next;
+      renderQuestion(currentNode);
+      restartBtn.style.display = "inline-block";
+    }
+  }
+
+  function updatePathDisplay() {
+    if (!path.length) {
+      pathContainer.textContent = "No answers yet. Start by choosing an option.";
+      return;
+    }
+
+    pathContainer.innerHTML = "";
+    path.forEach((step, index) => {
+      const pill = document.createElement("span");
+      pill.className = "pill pill-step";
+      pill.textContent = `Q${index + 1}: ${step.answer}`;
+      pathContainer.appendChild(pill);
+    });
+
+    const list = document.createElement("ol");
+    list.style.marginTop = "8px";
+    list.style.paddingLeft = "18px";
+    list.style.fontSize = "0.85rem";
+
+    path.forEach((step) => {
+      const li = document.createElement("li");
+      li.textContent = `${step.question} — ${step.answer}`;
+      list.appendChild(li);
+    });
+
+    pathContainer.appendChild(list);
+  }
+
+  function renderOutcome(key) {
+    const config = outcomes[key];
+    outcomeContainer.innerHTML = "";
+
+    const wrap = document.createElement("div");
+    wrap.className = "outcome";
+
+    const header = document.createElement("div");
+    header.className = "outcome-header";
+
+    const badge = document.createElement("span");
+    badge.className = `badge ${config.badgeClass}`;
+    badge.textContent = config.label;
+    header.appendChild(badge);
+
+    wrap.appendChild(header);
+
+    const summary = document.createElement("div");
+    summary.textContent = config.summary;
+    wrap.appendChild(summary);
+
+    const detail = document.createElement("div");
+    detail.className = "note";
+    detail.textContent = config.detail;
+    wrap.appendChild(detail);
+
+    // PROMINENT NEXT STEP BOX
+    const nextStepBox = document.createElement("div");
+    nextStepBox.className = "next-step-box";
+    
+    const nextStepText = document.createElement("p");
+    nextStepText.className = "next-step-text";
+    nextStepText.innerHTML = 
+      `Next step:<br><b>Go to the ${config.label} section in the document for more information and templates.</b>`;
+    
+    nextStepBox.appendChild(nextStepText);
+    wrap.appendChild(nextStepBox);
+
+    outcomeContainer.appendChild(wrap);
+  }
+
+  function restart() {
+    currentNode = tree;
+    path = [];
+    renderQuestion(currentNode);
+    updatePathDisplay();
+    outcomeContainer.textContent =
+      "You will see a recommendation here once you answer the questions.";
+    restartBtn.style.display = "none";
+  }
+
+  restartBtn.addEventListener("click", restart);
+
+  renderQuestion(currentNode);
+</script>
+</body>
+</html>
