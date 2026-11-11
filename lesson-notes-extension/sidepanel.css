@@ -1,0 +1,80 @@
+:root {
+  --bg: #fbfaf8;
+  --surface: #ffffff;
+  --text: #1f2328;
+  --muted: #646b73;
+  --border: #dcd9d3;
+  --accent: #2f5d62;
+  --accent-text: #ffffff;
+  --danger: #a33a3a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17191b;
+    --surface: #202326;
+    --text: #e7e5e1;
+    --muted: #a1a7ad;
+    --border: #3a3e42;
+    --accent: #6fa8ae;
+    --accent-text: #0f1213;
+    --danger: #e07a7a;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 12px 14px 32px;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, "Segoe UI", Tahoma, sans-serif;
+}
+h1 { font-size: 18px; margin: 0 0 2px; }
+h2 { font-size: 14px; margin: 0 0 8px; }
+header { margin-bottom: 10px; }
+section, details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+summary { cursor: pointer; font-weight: 600; }
+label { display: block; margin: 8px 0; font-size: 13px; color: var(--muted); }
+input, select, textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+textarea { resize: vertical; line-height: 1.7; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.row label { flex: 1; margin: 0; }
+.row input { flex: 1; margin: 0; }
+button {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: default; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.mono { font-family: ui-monospace, Menlo, monospace; }
+.status { min-height: 1.5em; margin: 8px 0 0; font-size: 13px; }
+.status.error { color: var(--danger); }
+.level { width: 60px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.level span { display: block; height: 100%; width: 0; background: var(--accent); }
+.notes { margin-top: 10px; line-height: 1.8; }
+.notes:empty { display: none; }
+.notes h1, .notes h2, .notes h3 { font-size: 15px; margin: 14px 0 6px; }
+.notes ul, .notes ol { padding-inline-start: 20px; margin: 4px 0; }
+.notes p { margin: 6px 0; }

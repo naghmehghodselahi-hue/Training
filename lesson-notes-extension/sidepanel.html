@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson Notes</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <header>
+    <h1>Lesson Notes</h1>
+    <p class="muted" id="target">Click the extension icon on the tab with your video.</p>
+  </header>
+
+  <details id="settingsBox">
+    <summary>Settings and API keys</summary>
+    <label>OpenAI API key (speech to text)
+      <input type="password" id="openaiKey" autocomplete="off" placeholder="sk-..." />
+    </label>
+    <label>Anthropic API key (notes and Q&amp;A)
+      <input type="password" id="anthropicKey" autocomplete="off" placeholder="sk-ant-..." />
+    </label>
+    <label>Transcription model
+      <select id="sttModel">
+        <option value="gpt-4o-transcribe">gpt-4o-transcribe (better Persian, coarse timestamps)</option>
+        <option value="whisper-1">whisper-1 (finer timestamps)</option>
+      </select>
+    </label>
+    <label>Claude model
+      <input type="text" id="claudeModel" />
+    </label>
+    <p class="muted small">Keys are stored only in this browser (chrome.storage.local). Audio goes to OpenAI, text goes to Anthropic. Don't use this on confidential material without permission.</p>
+  </details>
+
+  <section>
+    <h2>1. Record the video's audio</h2>
+    <div class="row">
+      <label>Video language
+        <select id="language">
+          <option value="fa">Persian</option>
+          <option value="en">English</option>
+          <option value="auto">Auto-detect</option>
+        </select>
+      </label>
+      <label>Playback speed
+        <select id="speed">
+          <option value="1">1x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2x</option>
+        </select>
+      </label>
+    </div>
+    <label>Technical terms in the video (optional, improves accuracy)
+      <input type="text" id="vocab" placeholder="e.g. instructional design, ADDIE, Articulate Rise" />
+    </label>
+    <p class="muted small">Set the same speed in the video player. Start recording, then press play. Keep this panel open until you stop.</p>
+    <div class="row">
+      <button id="startBtn" class="primary">Start recording</button>
+      <button id="stopBtn" disabled>Stop</button>
+      <span id="timer" class="mono">00:00</span>
+      <span id="level" class="level"><span></span></span>
+    </div>
+    <p id="status" class="status" role="status"></p>
+    <button id="retryBtn" hidden>Retry failed parts</button>
+  </section>
+
+  <section>
+    <h2>2. Transcript</h2>
+    <p class="muted small">Editable after recording. You can also paste any transcript here.</p>
+    <textarea id="transcript" dir="auto" rows="10" placeholder="Transcript appears here as you record..."></textarea>
+    <div class="row">
+      <button id="clearBtn">Clear</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Study notes</h2>
+    <label>What do you want from this video? (optional)
+      <input type="text" id="goal" placeholder="e.g. ideas I can apply when designing onboarding courses" />
+    </label>
+    <div class="row">
+      <label>Notes language
+        <select id="outputLang">
+          <option value="fa">Persian</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+      <button id="notesBtn" class="primary">Create notes</button>
+    </div>
+    <div id="notes" class="notes" dir="auto"></div>
+    <div class="row">
+      <button id="copyBtn">Copy notes</button>
+      <button id="downloadBtn">Download .md</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. Ask about the video</h2>
+    <div class="row">
+      <input type="text" id="question" dir="auto" placeholder="What did they say about assessment?" />
+      <button id="askBtn">Ask</button>
+    </div>
+    <div id="answer" class="notes" dir="auto"></div>
+  </section>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

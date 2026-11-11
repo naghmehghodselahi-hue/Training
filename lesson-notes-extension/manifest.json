@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Lesson Notes",
+  "version": "0.1.0",
+  "description": "Turn any video playing in a tab (Persian or English) into a transcript and structured study notes.",
+  "minimum_chrome_version": "116",
+  "permissions": ["sidePanel", "tabCapture", "activeTab", "storage"],
+  "host_permissions": [
+    "https://api.openai.com/*",
+    "https://api.anthropic.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Lesson Notes: open study panel for this tab"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}
